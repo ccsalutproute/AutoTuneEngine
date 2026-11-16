@@ -1,0 +1,64 @@
+name: Build VoxTune
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            name: Windows
+          - os: macos-latest
+            name: macOS
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release --parallel
+
+      - name: Test DSP engine
+        run: ctest --test-dir build -C Release --output-on-failure
+
+      - name: Package (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          Copy-Item -Recurse "build/VoxTune_artefacts/Release/VST3/VoxTune.vst3" dist/
+          Copy-Item "build/VoxTune_artefacts/Release/Standalone/VoxTune.exe" dist/
+          Compress-Archive -Path dist/* -DestinationPath VoxTune-Windows.zip
+
+      - name: Package (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          mkdir -p dist
+          cp -R build/VoxTune_artefacts/Release/VST3/VoxTune.vst3 dist/
+          cp -R build/VoxTune_artefacts/Release/AU/VoxTune.component dist/
+          cp -R build/VoxTune_artefacts/Release/Standalone/VoxTune.app dist/
+          cd dist && zip -r -y ../VoxTune-macOS.zip .
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: VoxTune-${{ matrix.name }}
+          path: VoxTune-*.zip
+
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: VoxTune-*.zip
