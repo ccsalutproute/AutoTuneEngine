@@ -47,6 +47,13 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           mkdir -p dist
+          A=build/VoxTune_artefacts/Release
+          for b in "$A/VST3/VoxTune.vst3" "$A/AU/VoxTune.component" "$A/Standalone/VoxTune.app"; do
+            lipo -info "$b/Contents/MacOS/"*
+            codesign --force --deep --sign - "$b"
+            codesign --verify --deep --strict --verbose=1 "$b"
+          done
+          lipo "$A/VST3/VoxTune.vst3/Contents/MacOS/VoxTune" -verify_arch arm64 x86_64
           cp -R build/VoxTune_artefacts/Release/VST3/VoxTune.vst3 dist/
           cp -R build/VoxTune_artefacts/Release/AU/VoxTune.component dist/
           cp -R build/VoxTune_artefacts/Release/Standalone/VoxTune.app dist/

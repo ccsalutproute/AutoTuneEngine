@@ -33,10 +33,15 @@ GitHub Actions compile automatiquement le plugin à chaque modification :
 3. Dans FL Studio : **Options → Manage plugins → Find installed plugins**.
 4. Sur la piste de voix du Mixer, ouvre un slot et choisis **VoxTune**.
 
-**macOS**
-1. Copie `VoxTune.vst3` dans `~/Library/Audio/Plug-Ins/VST3/`.
-2. Le plugin n'est pas signé. S'il est bloqué, lance dans le Terminal :
-   `xattr -cr ~/Library/Audio/Plug-Ins/VST3/VoxTune.vst3`
+**macOS** (Apple Silicon et Intel)
+1. Décompresse le zip.
+2. Dans le Finder, menu **Aller → Aller au dossier…**, tape `~/Library/Audio/Plug-Ins/`.
+3. Copie `VoxTune.vst3` dans le dossier `VST3` et `VoxTune.component` dans le dossier `Components`.
+4. Le plugin n'est pas notarisé par Apple : retire le blocage de macOS en collant ceci dans le **Terminal** :
+   ```bash
+   xattr -cr ~/Library/Audio/Plug-Ins/VST3/VoxTune.vst3 ~/Library/Audio/Plug-Ins/Components/VoxTune.component
+   ```
+5. Dans FL Studio : **Options → Manage plugins → Find installed plugins**, puis ajoute VoxTune sur la piste de voix du Mixer.
 
 ## Réglages conseillés
 

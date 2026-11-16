@@ -131,7 +131,7 @@ void PitchGraph::paint (juce::Graphics& g)
         for (int i = 0; i < kLen; ++i)
         {
             const float v = data[(write + i) % kLen];
-            const float x = b.getX() + 36.0f + i * dx;
+            const float x = b.getX() + 36.0f + (float) i * dx;
             if (v <= 0) { started = false; continue; }
             const float y = yOf (v);
             if (! started) { p.startNewSubPath (x, y); started = true; }

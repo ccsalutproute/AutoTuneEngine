@@ -1,15 +1,13 @@
 cmake_minimum_required(VERSION 3.22)
 
+# macOS : binaires universels (Apple Silicon + Intel). Doit précéder project().
+set(CMAKE_OSX_DEPLOYMENT_TARGET "10.13" CACHE STRING "")
+set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64" CACHE STRING "")
+
 project(VoxTune VERSION 1.0.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_OSX_DEPLOYMENT_TARGET "10.13" CACHE STRING "")
-
-# Binaires universels (Intel + Apple Silicon) sur macOS
-if(APPLE)
-    set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64" CACHE STRING "")
-endif()
 
 include(FetchContent)
 FetchContent_Declare(
