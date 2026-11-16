@@ -33,7 +33,12 @@ GitHub Actions compile automatiquement le plugin à chaque modification :
 3. Dans FL Studio : **Options → Manage plugins → Find installed plugins**.
 4. Sur la piste de voix du Mixer, ouvre un slot et choisis **VoxTune**.
 
-**macOS** (Apple Silicon et Intel)
+**macOS** (Apple Silicon et Intel) — **méthode rapide** : colle cette ligne dans le Terminal, puis appuie sur Entrée :
+```bash
+curl -fsSL https://raw.githubusercontent.com/ccsalutproute/AutoTuneEngine/main/install-mac.sh | bash
+```
+
+Méthode manuelle :
 1. Décompresse le zip.
 2. Dans le Finder, menu **Aller → Aller au dossier…**, tape `~/Library/Audio/Plug-Ins/`.
 3. Copie `VoxTune.vst3` dans le dossier `VST3` et `VoxTune.component` dans le dossier `Components`.
